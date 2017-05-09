@@ -34,3 +34,43 @@ func NewHTMLConfig() *Config {
 	c := Config{blockRenderers, styleRenderers, entityRenderers}
 	return &c
 }
+
+func NewPlainTextConfig() *Config {
+	blockRenderers := map[string]*BlockOption{
+		"blockquote":          {Before: "| ", After: ""},
+		"unordered-list-item": {Before: "- "},
+		"ordered-list-item":   {Before: "- "},
+	}
+	styleRenderers := map[string]*BlockOption{
+		"BOLD": {Before: "*", After: "*"},
+	}
+	entityRenderers := map[string]EntityDecorator{
+		"LINK": &PlainTextLinkDecorator{},
+	}
+	c := Config{blockRenderers, styleRenderers, entityRenderers}
+	return &c
+}
+
+func NewMarkdownConfig() *Config {
+	blockRenderers := map[string]*BlockOption{
+		"header-one":          {Before: "# "},
+		"header-two":          {Before: "## "},
+		"header-three":        {Before: "### "},
+		"header-four":         {Before: "#### "},
+		"header-five":         {Before: "##### "},
+		"header-six":          {Before: "###### "},
+		"code-block":          {Before: "```\n", After: "```"},
+		"blockquote":          {Before: "> "},
+		"unordered-list-item": {Before: "- "},
+		"ordered-list-item":   {Before: "1. "},
+	}
+	styleRenderers := map[string]*BlockOption{
+		"BOLD":   {Before: "**", After: "**"},
+		"ITALIC": {Before: "_", After: "_"},
+	}
+	entityRenderers := map[string]EntityDecorator{
+		"LINK": &PlainTextLinkDecorator{},
+	}
+	c := Config{blockRenderers, styleRenderers, entityRenderers}
+	return &c
+}

@@ -19,3 +19,13 @@ func (d *LinkDecorator) RenderBefore(data map[string]interface{}) string {
 func (d *LinkDecorator) RenderAfter(data map[string]interface{}) string {
 	return "</a>"
 }
+
+type PlainTextLinkDecorator struct{}
+
+func (d *PlainTextLinkDecorator) RenderBefore(data map[string]interface{}) string {
+	return "["
+}
+
+func (d *PlainTextLinkDecorator) RenderAfter(data map[string]interface{}) string {
+	return fmt.Sprintf("](%s)", data["url"])
+}
