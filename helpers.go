@@ -100,7 +100,7 @@ func renderInlineStylesAndEntities(content *ContentState, block *ContentBlock, c
 	}
 
 	for _, rng := range ranges {
-		styles := GetStyleForRange(rng, block)
+		styles := getStyleForRange(rng, block)
 		entities := getEntityForRange(rng, block)
 		for i := 0; i < len(styles); i++ {
 			buf.WriteString(getStyleBefore(styles[i], config))
@@ -132,7 +132,7 @@ func getEntityForRange(r *Range, block *ContentBlock) []*EntityRange {
 	return res
 }
 
-func GetStyleForRange(r *Range, block *ContentBlock) []*InlineStyleRange {
+func getStyleForRange(r *Range, block *ContentBlock) []*InlineStyleRange {
 
 	if block.InlineStyleRanges == nil || len(block.InlineStyleRanges) == 0 {
 		return nil

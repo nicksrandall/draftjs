@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-const TAB = "  "
+const tab = "  "
 
 type wrapperBlockStack struct {
 	blocks []*ContentBlock
@@ -42,28 +42,28 @@ func renderBlock(contentState *ContentState, BlockIterator *blockIterator, stack
 		if !stack.isEmpty() {
 			if stack.CurrentBlock().Type != BlockIterator.block.Type {
 				wrapperBlock := stack.Pop()
-				buf.WriteString(strings.Repeat(TAB, wrapperBlock.Depth) + getBlockParentAfter(wrapperBlock, config))
+				buf.WriteString(strings.Repeat(tab, wrapperBlock.Depth) + getBlockParentAfter(wrapperBlock, config))
 				if wrapperBlock.Type == "unordered-list-item" || wrapperBlock.Type == "ordered-list-item" {
 					buf.WriteRune('\n')
 				}
 				if BlockIterator.block.Type == "unordered-list-item" || BlockIterator.block.Type == "ordered-list-item" {
-					buf.WriteString(strings.Repeat(TAB, stack.length) + getBlockParentBefore(BlockIterator.block, config))
+					buf.WriteString(strings.Repeat(tab, stack.length) + getBlockParentBefore(BlockIterator.block, config))
 					stack.Push(BlockIterator.block)
 				}
 			} else if previousBlock := stack.CurrentBlock(); previousBlock.Depth < BlockIterator.block.Depth {
 				if BlockIterator.block.Type == "unordered-list-item" || BlockIterator.block.Type == "ordered-list-item" {
-					buf.WriteString(strings.Repeat(TAB, stack.length) + getBlockParentBefore(previousBlock, config))
+					buf.WriteString(strings.Repeat(tab, stack.length) + getBlockParentBefore(previousBlock, config))
 					stack.Push(BlockIterator.block)
 				}
 			}
 		} else {
 			if BlockIterator.block.Type == "unordered-list-item" || BlockIterator.block.Type == "ordered-list-item" {
-				buf.WriteString(strings.Repeat(TAB, BlockIterator.block.Depth) + getBlockParentBefore(BlockIterator.block, config))
+				buf.WriteString(strings.Repeat(tab, BlockIterator.block.Depth) + getBlockParentBefore(BlockIterator.block, config))
 				stack.Push(BlockIterator.block)
 			}
 		}
 		currentBlock := BlockIterator.block
-		buf.WriteString("\n" + strings.Repeat(TAB, currentBlock.Depth) + getBlockBefore(currentBlock, config))
+		buf.WriteString("\n" + strings.Repeat(tab, currentBlock.Depth) + getBlockBefore(currentBlock, config))
 
 		renderInlineStylesAndEntities(contentState, currentBlock, config, buf)
 		if BlockIterator.HasNext() && BlockIterator.NextBlock().Depth > currentBlock.Depth {
@@ -73,7 +73,7 @@ func renderBlock(contentState *ContentState, BlockIterator *blockIterator, stack
 
 		if BlockIterator.HasNext() && BlockIterator.NextBlock().Depth < currentBlock.Depth {
 			if BlockIterator.block.Type == "unordered-list-item" || BlockIterator.block.Type == "ordered-list-item" {
-				buf.WriteString(strings.Repeat(TAB, BlockIterator.block.Depth) + getBlockParentAfter(BlockIterator.block, config))
+				buf.WriteString(strings.Repeat(tab, BlockIterator.block.Depth) + getBlockParentAfter(BlockIterator.block, config))
 				stack.Pop()
 			}
 			break
