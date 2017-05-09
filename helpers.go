@@ -8,49 +8,49 @@ import (
 	"unicode/utf8"
 )
 
-func GetBlockBefore(block *ContentBlock, config *Config) string {
+func getBlockBefore(block *ContentBlock, config *Config) string {
 	if option, ok := config.blockRenderers[block.Type]; ok {
 		return option.Before
 	}
 	return ""
 }
 
-func GetBlockAfter(block *ContentBlock, config *Config) string {
+func getBlockAfter(block *ContentBlock, config *Config) string {
 	if option, ok := config.blockRenderers[block.Type]; ok {
 		return option.After
 	}
 	return ""
 }
 
-func GetBlockParentBefore(block *ContentBlock, config *Config) string {
+func getBlockParentBefore(block *ContentBlock, config *Config) string {
 	if option, ok := config.blockRenderers[block.Type]; ok {
 		return option.ParentBefore
 	}
 	return ""
 }
 
-func GetBlockParentAfter(block *ContentBlock, config *Config) string {
+func getBlockParentAfter(block *ContentBlock, config *Config) string {
 	if option, ok := config.blockRenderers[block.Type]; ok {
 		return option.ParentAfter
 	}
 	return ""
 }
 
-func GetStyleBefore(style *InlineStyleRange, config *Config) string {
+func getStyleBefore(style *InlineStyleRange, config *Config) string {
 	if option, ok := config.styleRenderers[style.Style]; ok {
 		return option.Before
 	}
 	return ""
 }
 
-func GetStyleAfter(style *InlineStyleRange, config *Config) string {
+func getStyleAfter(style *InlineStyleRange, config *Config) string {
 	if option, ok := config.styleRenderers[style.Style]; ok {
 		return option.After
 	}
 	return ""
 }
 
-func GetEntityBefore(entity *Entity, config *Config) string {
+func getEntityBefore(entity *Entity, config *Config) string {
 	if entity == nil {
 		return ""
 	}
@@ -60,7 +60,7 @@ func GetEntityBefore(entity *Entity, config *Config) string {
 	return ""
 }
 
-func GetEntityAfter(entity *Entity, config *Config) string {
+func getEntityAfter(entity *Entity, config *Config) string {
 	if entity == nil {
 		return ""
 	}
@@ -70,7 +70,7 @@ func GetEntityAfter(entity *Entity, config *Config) string {
 	return ""
 }
 
-func GetEntity(contentState *ContentState, entityRange *EntityRange) *Entity {
+func getEntity(contentState *ContentState, entityRange *EntityRange) *Entity {
 	if entity, ok := contentState.EntityMap[strconv.Itoa(entityRange.Key)]; ok {
 		return entity
 	}
@@ -92,8 +92,8 @@ func substring(s string, start int, end int) string {
 	return s[start_str_idx:]
 }
 
-func RenderInlineStylesAndEntities(content *ContentState, block *ContentBlock, config *Config, buf *bytes.Buffer) {
-	ranges, noStyles := GetRanges(block)
+func renderInlineStylesAndEntities(content *ContentState, block *ContentBlock, config *Config, buf *bytes.Buffer) {
+	ranges, noStyles := getRanges(block)
 	if noStyles {
 		buf.WriteString(template.HTMLEscapeString(block.Text))
 		return
@@ -101,25 +101,25 @@ func RenderInlineStylesAndEntities(content *ContentState, block *ContentBlock, c
 
 	for _, rng := range ranges {
 		styles := GetStyleForRange(rng, block)
-		entities := GetEntityForRange(rng, block)
+		entities := getEntityForRange(rng, block)
 		for i := 0; i < len(styles); i++ {
-			buf.WriteString(GetStyleBefore(styles[i], config))
+			buf.WriteString(getStyleBefore(styles[i], config))
 		}
 		for i := 0; i < len(entities); i++ {
-			buf.WriteString(GetEntityBefore(GetEntity(content, entities[i]), config))
+			buf.WriteString(getEntityBefore(getEntity(content, entities[i]), config))
 		}
 		buf.WriteString(template.HTMLEscapeString(substring(block.Text, rng.Offset, rng.Offset+rng.Length)))
 		for i := len(entities) - 1; i >= 0; i-- {
-			buf.WriteString(GetEntityAfter(GetEntity(content, entities[i]), config))
+			buf.WriteString(getEntityAfter(getEntity(content, entities[i]), config))
 		}
 		for i := len(styles) - 1; i >= 0; i-- {
-			buf.WriteString(GetStyleAfter(styles[i], config))
+			buf.WriteString(getStyleAfter(styles[i], config))
 		}
 	}
 
 }
 
-func GetEntityForRange(r *Range, block *ContentBlock) []*EntityRange {
+func getEntityForRange(r *Range, block *ContentBlock) []*EntityRange {
 	if block.EntityRanges == nil || len(block.EntityRanges) == 0 {
 		return nil
 	}
@@ -147,12 +147,12 @@ func GetStyleForRange(r *Range, block *ContentBlock) []*InlineStyleRange {
 }
 
 // bool == fullstring (no styles)
-func GetRanges(block *ContentBlock) ([]*Range, bool) {
+func getRanges(block *ContentBlock) ([]*Range, bool) {
 	if len(block.InlineStyleRanges)+len(block.EntityRanges) == 0 {
 		return nil, true
 	}
 
-	breakPoints, runeCount := GetBreakPoints(block)
+	breakPoints, runeCount := getBreakPoints(block)
 	prev := 0
 	res := make([]*Range, 0, 0)
 	var lastRange *Range
@@ -178,7 +178,7 @@ func GetRanges(block *ContentBlock) ([]*Range, bool) {
 	return res, false
 }
 
-func GetBreakPoints(block *ContentBlock) ([]int, int) {
+func getBreakPoints(block *ContentBlock) ([]int, int) {
 	runeCount := utf8.RuneCountInString(block.Text)
 	breakPoints := make([]int, runeCount+1, runeCount+1)
 

@@ -2,7 +2,7 @@
 [![GoDoc](https://godoc.org/github.com/nicksrandall/draftjs?status.svg)](https://godoc.org/github.com/nicksrandall/draftjs)
 [![Build Status](https://travis-ci.org/nicksrandall/draftjs.svg?branch=master)](https://travis-ci.org/nicksrandall/draftjs)
 
-This package can take a [raw](https://draftjs.org/docs/api-reference-data-conversion.html#converttoraw) [draftjs](https://draftjs.org) [contentState](https://draftjs.org/docs/api-reference-content-state.html#content) and export it as HTML, Markdown, and Plain Text.
+This package can take a [raw](https://draftjs.org/docs/api-reference-data-conversion.html#converttoraw) [draftjs](https://draftjs.org) [contentState](https://draftjs.org/docs/api-reference-content-state.html#content) and export it as HTML, Markdown, or Plain Text.
 
 ## Usage
 

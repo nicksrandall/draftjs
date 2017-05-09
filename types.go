@@ -27,6 +27,7 @@ type Entity struct {
 	Data       map[string]interface{} `json:"data"`
 }
 
+// Range is used by both InlineStyles and Entities
 type Range struct {
 	Offset int `json:"offset"`
 	Length int `json:"length"`

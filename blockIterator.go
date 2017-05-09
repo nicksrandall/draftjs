@@ -1,13 +1,13 @@
 package draftjs
 
-type BlockIterator struct {
+type blockIterator struct {
 	block        *ContentBlock
 	index        int
 	contentState *ContentState
 }
 
-func NewBlockIterator(contentState *ContentState) *BlockIterator {
-	bi := new(BlockIterator)
+func newBlockIterator(contentState *ContentState) *blockIterator {
+	bi := new(blockIterator)
 	bi.contentState = contentState
 	bi.index = 0
 	if len(contentState.Blocks) > 0 {
@@ -16,11 +16,11 @@ func NewBlockIterator(contentState *ContentState) *BlockIterator {
 	return bi
 }
 
-func (bi *BlockIterator) HasNext() bool {
+func (bi *blockIterator) HasNext() bool {
 	return len(bi.contentState.Blocks) != 0 && bi.index+1 < len(bi.contentState.Blocks)
 }
 
-func (bi *BlockIterator) StepNext() *BlockIterator {
+func (bi *blockIterator) StepNext() *blockIterator {
 	if bi.HasNext() {
 		bi.index++
 		bi.block = bi.contentState.Blocks[bi.index]
@@ -30,7 +30,7 @@ func (bi *BlockIterator) StepNext() *BlockIterator {
 	return nil
 }
 
-func (bi BlockIterator) NextBlock() *ContentBlock {
+func (bi blockIterator) NextBlock() *ContentBlock {
 	if bi.HasNext() {
 		return bi.contentState.Blocks[bi.index+1]
 	}

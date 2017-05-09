@@ -1,11 +1,21 @@
 package draftjs
 
+// Block Option is used by Config to determine how to render blocks (and styles)
+type BlockOption struct {
+	Before       string
+	After        string
+	ParentBefore string
+	ParentAfter  string
+}
+
+// Config is passed to the Render function and used to configure how the content state is rendered
 type Config struct {
 	blockRenderers  map[string]*BlockOption
 	styleRenderers  map[string]*BlockOption
 	entityRenderers map[string]EntityDecorator
 }
 
+// NewHTMLConfig will create a new config for exporting HTML
 func NewHTMLConfig() *Config {
 	blockRenderers := map[string]*BlockOption{
 		"header-one":          {Before: "<h1>", After: "</h1>"},
@@ -35,6 +45,7 @@ func NewHTMLConfig() *Config {
 	return &c
 }
 
+// NewPlainTextConfig will create a new config for exporting Plain Text
 func NewPlainTextConfig() *Config {
 	blockRenderers := map[string]*BlockOption{
 		"blockquote":          {Before: "| ", After: ""},
@@ -51,6 +62,7 @@ func NewPlainTextConfig() *Config {
 	return &c
 }
 
+// NewMarkdownConfig will create a new config for exporting markdown
 func NewMarkdownConfig() *Config {
 	blockRenderers := map[string]*BlockOption{
 		"header-one":          {Before: "# "},
